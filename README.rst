@@ -11,7 +11,7 @@ Maybe
     :target: https://codecov.io/gh/rustedpy/maybe
 
 A simple Maybe (Option) type for Python 3 `inspired by Rust
-<https://doc.rust-lang.org/std/maybe/>`__, fully type annotated.
+<https://doc.rust-lang.org/std/option/>`__, fully type annotated.
 
 Installation
 ============
