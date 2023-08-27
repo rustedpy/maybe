@@ -2,20 +2,16 @@
 Maybe
 ======
 
-======
-Result
-======
-
-.. image:: https://img.shields.io/github/actions/workflow/status/rustedpy/result/ci.yml?branch=master
+.. image:: https://img.shields.io/github/actions/workflow/status/rustedpy/maybe/ci.yml?branch=master
     :alt: GitHub Workflow Status (branch)
-    :target: https://github.com/rustedpy/result/actions/workflows/ci.yml?query=branch%3Amaster
+    :target: https://github.com/rustedpy/maybe/actions/workflows/ci.yml?query=branch%3Amaster
 
-.. image:: https://codecov.io/gh/rustedpy/result/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/rustedpy/maybe/branch/master/graph/badge.svg
     :alt: Coverage
-    :target: https://codecov.io/gh/rustedpy/result
+    :target: https://codecov.io/gh/rustedpy/maybe
 
 A simple Maybe (Option) type for Python 3 `inspired by Rust
-<https://doc.rust-lang.org/std/result/>`__, fully type annotated.
+<https://doc.rust-lang.org/std/maybe/>`__, fully type annotated.
 
 Installation
 ============
@@ -26,16 +22,16 @@ Latest GitHub ``master`` branch version:
 
 .. sourcecode:: sh
 
-   $ pip install git+https://github.com/rustedpy/result
+   $ pip install git+https://github.com/rustedpy/maybe
 
 Summary
 =======
 
 **Experimental. API subject to change.**
 
-The idea is that a result value can be either ``Some(value)`` or ``Nothing()``,
-with a way to differentiate between the two. ``Some`` and ``Nothing`` are both classes
-encapsulating a possible value.
+The idea is that a possible value can be either ``Some(value)`` or
+``Nothing()``, with a way to differentiate between the two. ``Some`` and
+``Nothing`` are both classes encapsulating a possible value.
 
 Example usage,
 
