@@ -1,1 +1,1 @@
-include maybe/py.typed
+include src/maybe/py.typed

@@ -1,12 +1,8 @@
 from __future__ import annotations
 
-import functools
-import inspect
 import sys
-from warnings import warn
 from typing import (
     Any,
-    Awaitable,
     Callable,
     Final,
     Generic,
@@ -24,7 +20,6 @@ else:
 
 
 T = TypeVar("T", covariant=True)  # Success type
-E = TypeVar("E", covariant=True)  # Error type
 U = TypeVar("U")
 F = TypeVar("F")
 P = ParamSpec("P")
@@ -34,7 +29,7 @@ TBE = TypeVar("TBE", bound=BaseException)
 
 class Some(Generic[T]):
     """
-    A value that indicates success and which stores arbitrary data for the return value.
+    An object that indicates some inner value is present
     """
 
     __match_args__ = ("some_value",)
@@ -44,7 +39,7 @@ class Some(Generic[T]):
         self._value = value
 
     def __repr__(self) -> str:
-        return "Some({})".format(repr(self._value))
+        return f"Some({self._value!r})"
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, Some) and self._value == other._value
@@ -67,28 +62,6 @@ class Some(Generic[T]):
         """
         return self._value
 
-    def nothing(self) -> None:
-        """
-        Return `None`.
-        """
-        return None
-
-    @property
-    def value(self) -> T:
-        """
-        Return the inner value.
-
-        @deprecated Use `some_value` or `nothing_value` instead. This method will be
-        removed in a future version.
-        """
-        warn(
-            "Accessing `.value` on Maybe type is deprecated, please use "
-            + "`.some_value` or '.nothing_value' instead",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self._value
-
     @property
     def some_value(self) -> T:
         """
@@ -102,23 +75,11 @@ class Some(Generic[T]):
         """
         return self._value
 
-    def expect_nothing(self, message: str) -> NoReturn:
-        """
-        Raise an UnwrapError since this type is `Some`
-        """
-        raise UnwrapError(self, message)
-
     def unwrap(self) -> T:
         """
         Return the value.
         """
         return self._value
-
-    def unwrap_nothing(self) -> NoReturn:
-        """
-        Raise an UnwrapError since this type is `Some`
-        """
-        raise UnwrapError(self, "Called `Maybe.unwrap_nothing()` on an `Some` value")
 
     def unwrap_or(self, _default: U) -> T:
         """
@@ -140,67 +101,63 @@ class Some(Generic[T]):
 
     def map(self, op: Callable[[T], U]) -> Some[U]:
         """
-        The contained maybe is `Some`, so return `Some` with original value mapped to
-        a new value using the passed in function.
+        There is a contained value, so return `Some` with original value mapped
+        to a new value using the passed in function.
         """
         return Some(op(self._value))
 
-    def map_or(self, default: object, op: Callable[[T], U]) -> U:
+    def map_or(self, _default: object, op: Callable[[T], U]) -> U:
         """
-        The contained maybe is `Some`, so return the original value mapped to a new
-        value using the passed in function.
-        """
-        return op(self._value)
-
-    def map_or_else(self, default_op: object, op: Callable[[T], U]) -> U:
-        """
-        The contained maybe is `Some`, so return original value mapped to
-        a new value using the passed in `op` function.
+        There is a contained value, so return the original value mapped to a
+        new value using the passed in function.
         """
         return op(self._value)
 
-    def map_nothing(self, op: object) -> Some[T]:
+    def map_or_else(self, _default_op: object, op: Callable[[T], U]) -> U:
         """
-        The contained maybe is `Some`, so return `Some` with the original value
+        There is a contained value, so return original value mapped to a new
+        value using the passed in `op` function.
         """
-        return self
+        return op(self._value)
 
-    def and_then(self, op: Callable[[T], Maybe[U, E]]) -> Maybe[U, E]:
+    def and_then(self, op: Callable[[T], Maybe[U]]) -> Maybe[U]:
         """
-        The contained maybe is `Some`, so return the maybe of `op` with the
+        There is a contained value, so return the maybe of `op` with the
         original value passed in
         """
         return op(self._value)
 
-    def or_else(self, op: object) -> Some[T]:
+    def or_else(self, _op: object) -> Some[T]:
         """
-        The contained maybe is `Some`, so return `Some` with the original value
+        There is a contained value, so return `Some` with the original value
         """
         return self
 
 
-class Nothing(Generic[E]):
+class Nothing:
     """
-    A value that signifies failure and which stores arbitrary data for the error.
+    An object that indicates no inner value is present
     """
 
     __match_args__ = ("nothing_value",)
-    __slots__ = ("_value",)
+    __slots__ = ()
 
-    def __init__(self, value: E) -> None:
-        self._value = value
+    def __init__(self) -> None:
+        pass
 
     def __repr__(self) -> str:
-        return "Nothing({})".format(repr(self._value))
+        return "Nothing()"
 
     def __eq__(self, other: Any) -> bool:
-        return isinstance(other, Nothing) and self._value == other._value
+        return isinstance(other, Nothing)
 
     def __ne__(self, other: Any) -> bool:
-        return not (self == other)
+        return not isinstance(other, Nothing)
 
     def __hash__(self) -> int:
-        return hash((False, self._value))
+        # A large random number is used here to avoid a hash collision with
+        # something else since there is no real inner value for us to hash.
+        return hash((False, 982006445019657274590041599673))
 
     def is_some(self) -> Literal[False]:
         return False
@@ -214,52 +171,15 @@ class Nothing(Generic[E]):
         """
         return None
 
-    def nothing(self) -> E:
-        """
-        Return the error.
-        """
-        return self._value
-
-    @property
-    def value(self) -> E:
-        """
-        Return the inner value.
-
-        @deprecated Use `some_value` or `nothing_value` instead. This method will be
-        removed in a future version.
-        """
-        warn(
-            "Accessing `.value` on Maybe type is deprecated, please use "
-            + "`.some_value` or '.nothing_value' instead",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self._value
-
-    @property
-    def nothing_value(self) -> E:
-        """
-        Return the inner value.
-        """
-        return self._value
-
     def expect(self, message: str) -> NoReturn:
         """
         Raises an `UnwrapError`.
         """
         exc = UnwrapError(
             self,
-            f"{message}: {self._value!r}",
+            f"{message}",
         )
-        if isinstance(self._value, BaseException):
-            raise exc from self._value
         raise exc
-
-    def expect_nothing(self, _message: str) -> E:
-        """
-        Return the inner value
-        """
-        return self._value
 
     def unwrap(self) -> NoReturn:
         """
@@ -267,17 +187,9 @@ class Nothing(Generic[E]):
         """
         exc = UnwrapError(
             self,
-            f"Called `Maybe.unwrap()` on an `Nothing` value: {self._value!r}",
+            "Called `Maybe.unwrap()` on a `Nothing` value",
         )
-        if isinstance(self._value, BaseException):
-            raise exc from self._value
         raise exc
-
-    def unwrap_nothing(self) -> E:
-        """
-        Return the inner value
-        """
-        return self._value
 
     def unwrap_or(self, default: U) -> U:
         """
@@ -285,26 +197,25 @@ class Nothing(Generic[E]):
         """
         return default
 
-    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
+    def unwrap_or_else(self, op: Callable[[], T]) -> T:
         """
-        The contained maybe is ``Nothing``, so return the maybe of applying
-        ``op`` to the error value.
+        There is no contained value, so return a new value by calling `op`.
         """
-        return op(self._value)
+        return op()
 
     def unwrap_or_raise(self, e: Type[TBE]) -> NoReturn:
         """
-        The contained maybe is ``Nothing``, so raise the exception with the value.
+        There is no contained value, so raise the exception with the value.
         """
-        raise e(self._value)
+        raise e()
 
-    def map(self, op: object) -> Nothing[E]:
+    def map(self, _op: object) -> Nothing:
         """
-        Return `Nothing` with the same value
+        Return `Nothing`
         """
         return self
 
-    def map_or(self, default: U, op: object) -> U:
+    def map_or(self, default: U, _op: object) -> U:
         """
         Return the default value
         """
@@ -312,29 +223,21 @@ class Nothing(Generic[E]):
 
     def map_or_else(self, default_op: Callable[[], U], op: object) -> U:
         """
-        Return the maybe of the default operation
+        Return the result of the `default_op` function
         """
         return default_op()
 
-    def map_nothing(self, op: Callable[[E], F]) -> Nothing[F]:
+    def and_then(self, _op: object) -> Nothing:
         """
-        The contained maybe is `Nothing`, so return `Nothing` with original error mapped to
-        a new value using the passed in function.
-        """
-        return Nothing(op(self._value))
-
-    def and_then(self, op: object) -> Nothing[E]:
-        """
-        The contained maybe is `Nothing`, so return `Nothing` with the original value
+        There is no contained value, so return `Nothing`
         """
         return self
 
-    def or_else(self, op: Callable[[E], Maybe[T, F]]) -> Maybe[T, F]:
+    def or_else(self, op: Callable[[], Maybe[T]]) -> Maybe[T]:
         """
-        The contained maybe is `Nothing`, so return the maybe of `op` with the
-        original value passed in
+        There is no contained value, so return the result of `op`
         """
-        return op(self._value)
+        return op()
 
 
 # define Maybe as a generic type alias for use
@@ -344,7 +247,7 @@ A simple `Maybe` type inspired by Rust.
 Not all methods (https://doc.rust-lang.org/std/option/enum.Option.html)
 have been implemented, only the ones that make sense in the Python context.
 """
-Maybe: TypeAlias = Union[Some[T], Nothing[E]]
+Maybe: TypeAlias = Union[Some[T], Nothing]
 
 """
 A type to use in `isinstance` checks.
@@ -359,91 +262,25 @@ class UnwrapError(Exception):
 
     The original ``Maybe`` can be accessed via the ``.maybe`` attribute, but
     this is not intended for regular use, as type information is lost:
-    ``UnwrapError`` doesn't know about both ``T`` and ``E``, since it's raised
-    from ``Some()`` or ``Nothing()`` which only knows about either ``T`` or ``E``,
-    not both.
+    ``UnwrapError`` doesn't know about ``T``, since it's raised from ``Some()``
+    or ``Nothing()`` which only knows about either ``T`` or no-value, not both.
     """
 
-    _maybe: Maybe[object, object]
+    _maybe: Maybe[object]
 
-    def __init__(self, maybe: Maybe[object, object], message: str) -> None:
+    def __init__(self, maybe: Maybe[object], message: str) -> None:
         self._maybe = maybe
         super().__init__(message)
 
     @property
-    def maybe(self) -> Maybe[Any, Any]:
+    def maybe(self) -> Maybe[Any]:
         """
         Returns the original maybe.
         """
         return self._maybe
 
 
-def as_maybe(
-    *exceptions: Type[TBE],
-) -> Callable[[Callable[P, R]], Callable[P, Maybe[R, TBE]]]:
-    """
-    Make a decorator to turn a function into one that returns a ``Maybe``.
-
-    Regular return values are turned into ``Some(return_value)``. Raised
-    exceptions of the specified exception type(s) are turned into ``Nothing(exc)``.
-    """
-    if not exceptions or not all(
-        inspect.isclass(exception) and issubclass(exception, BaseException)
-        for exception in exceptions
-    ):
-        raise TypeError("as_maybe() requires one or more exception types")
-
-    def decorator(f: Callable[P, R]) -> Callable[P, Maybe[R, TBE]]:
-        """
-        Decorator to turn a function into one that returns a ``Maybe``.
-        """
-
-        @functools.wraps(f)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> Maybe[R, TBE]:
-            try:
-                return Some(f(*args, **kwargs))
-            except exceptions as exc:
-                return Nothing(exc)
-
-        return wrapper
-
-    return decorator
-
-
-def as_async_maybe(
-    *exceptions: Type[TBE],
-) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[Maybe[R, TBE]]]]:
-    """
-    Make a decorator to turn an async function into one that returns a ``Maybe``.
-    Regular return values are turned into ``Some(return_value)``. Raised
-    exceptions of the specified exception type(s) are turned into ``Nothing(exc)``.
-    """
-    if not exceptions or not all(
-        inspect.isclass(exception) and issubclass(exception, BaseException)
-        for exception in exceptions
-    ):
-        raise TypeError("as_maybe() requires one or more exception types")
-
-    def decorator(
-        f: Callable[P, Awaitable[R]]
-    ) -> Callable[P, Awaitable[Maybe[R, TBE]]]:
-        """
-        Decorator to turn a function into one that returns a ``Maybe``.
-        """
-
-        @functools.wraps(f)
-        async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> Maybe[R, TBE]:
-            try:
-                return Some(await f(*args, **kwargs))
-            except exceptions as exc:
-                return Nothing(exc)
-
-        return async_wrapper
-
-    return decorator
-
-
-def is_some(maybe: Maybe[T, E]) -> TypeGuard[Some[T]]:
+def is_some(maybe: Maybe[T]) -> TypeGuard[Some[T]]:
     """A typeguard to check if a maybe is an Some
 
     Usage:
@@ -456,7 +293,7 @@ def is_some(maybe: Maybe[T, E]) -> TypeGuard[Some[T]]:
     return maybe.is_some()
 
 
-def is_nothing(maybe: Maybe[T, E]) -> TypeGuard[Nothing[E]]:
+def is_nothing(maybe: Maybe[T]) -> TypeGuard[Nothing]:
     """A typeguard to check if a maybe is an Nothing
 
     Usage:

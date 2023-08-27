@@ -2,4 +2,54 @@
 Maybe
 ======
 
-Experimental. Do not use yet.
+======
+Result
+======
+
+.. image:: https://img.shields.io/github/actions/workflow/status/rustedpy/result/ci.yml?branch=master
+    :alt: GitHub Workflow Status (branch)
+    :target: https://github.com/rustedpy/result/actions/workflows/ci.yml?query=branch%3Amaster
+
+.. image:: https://codecov.io/gh/rustedpy/result/branch/master/graph/badge.svg
+    :alt: Coverage
+    :target: https://codecov.io/gh/rustedpy/result
+
+A simple Maybe (Option) type for Python 3 `inspired by Rust
+<https://doc.rust-lang.org/std/result/>`__, fully type annotated.
+
+Installation
+============
+
+Not yet available on PyPI. PyPI package coming soon.
+
+Latest GitHub ``master`` branch version:
+
+.. sourcecode:: sh
+
+   $ pip install git+https://github.com/rustedpy/result
+
+Summary
+=======
+
+**Experimental. API subject to change.**
+
+The idea is that a result value can be either ``Some(value)`` or ``Nothing()``,
+with a way to differentiate between the two. ``Some`` and ``Nothing`` are both classes
+encapsulating a possible value.
+
+Example usage,
+
+.. sourcecode:: Python
+
+    from rustedpy-maybe import Nothing, Some
+
+    o = Some('yay')
+    n = Nothing()
+    assert o.unwrap_or_else(str.upper) == 'yay'
+    assert n.unwrap_or_else(lambda: 'default') == 'default'
+
+
+License
+=======
+
+MIT License

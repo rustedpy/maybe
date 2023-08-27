@@ -1,95 +1,87 @@
 ---
-# reveal_type(res3) # N: Revealed type is "result.result.Err[builtins.int]"
+# reveal_type(res3) # N: Revealed type is "maybe.maybe.Nothing"
 - case: failure_lash
   disable_cache: false
   main: |
     from typing import Callable, List, Optional
 
-    from result import Result, Ok, Err
+    from maybe import Maybe, Some, Nothing
 
 
-    res1: Result[str, int] = Ok('hello')
-    reveal_type(res1) # N: Revealed type is "Union[result.result.Ok[builtins.str], result.result.Err[builtins.int]]"
-    if isinstance(res1, Ok):
-        ok: Ok[str] = res1
-        reveal_type(ok) # N: Revealed type is "result.result.Ok[builtins.str]"
-        okValue: str = res1.ok()
-        reveal_type(okValue) # N: Revealed type is "builtins.str"
+    res1: Maybe[str] = Some('hello')
+    reveal_type(res1) # N: Revealed type is "Union[maybe.maybe.Some[builtins.str], maybe.maybe.Nothing]"
+    if isinstance(res1, Some):
+        some: Some[str] = res1
+        reveal_type(some) # N: Revealed type is "maybe.maybe.Some[builtins.str]"
+        someValue: str = res1.some()
+        reveal_type(someValue) # N: Revealed type is "builtins.str"
         mapped_to_float: float = res1.map_or(1.0, lambda s: len(s) * 1.5)
         reveal_type(mapped_to_float) # N: Revealed type is "builtins.float"
     else:
-        err: Err[int] = res1
-        reveal_type(err) # N: Revealed type is "result.result.Err[builtins.int]"
-        errValue: int = err.err()
-        reveal_type(errValue) # N: Revealed type is "builtins.int"
-        mapped_to_list: Optional[List[int]] = res1.map_err(lambda e: [e]).err()
-        reveal_type(mapped_to_list) # N: Revealed type is "Union[builtins.list[builtins.int], None]"
+        nothing: Nothing = res1
+        reveal_type(nothing) # N: Revealed type is "maybe.maybe.Nothing"
 
     # Test constructor functions
-    res2 = Ok(42)
-    reveal_type(res2) # N: Revealed type is "result.result.Ok[builtins.int]"
-    res3 = Err(1)
-    reveal_type(res3) # N: Revealed type is "result.result.Err[builtins.int]"
+    res2 = Some(42)
+    reveal_type(res2) # N: Revealed type is "maybe.maybe.Some[builtins.int]"
+    res3 = Nothing()
+    reveal_type(res3) # N: Revealed type is "maybe.maybe.Nothing"
 
-    res4 = Ok(4)
-    add1: Callable[[int], Result[int, str]] = lambda i: Ok(i + 1)
-    toint: Callable[[str], Result[int, str]] = lambda i: Ok(int(i))
+    res4 = Some(4)
+    add1: Callable[[int], Maybe[int]] = lambda i: Some(i + 1)
+    toint: Callable[[str], Maybe[int]] = lambda i: Some(int(i))
     res5 = res4.and_then(add1)
-    reveal_type(res5) # N: Revealed type is "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str]]"
+    reveal_type(res5) # N: Revealed type is "Union[maybe.maybe.Some[builtins.int], maybe.maybe.Nothing]"
     res6 = res4.or_else(toint)
-    reveal_type(res6) # N: Revealed type is "result.result.Ok[builtins.int]"
+    reveal_type(res6) # N: Revealed type is "maybe.maybe.Some[builtins.int]"
 
 - case: covariance
   disable_cache: false
   main: |
-    from result import Result, Ok, Err
+    from maybe import Maybe, Some, Nothing
 
-    ok_int: Ok[int] = Ok(42)
-    ok_float: Ok[float] = ok_int
-    ok_int = ok_float  # E: Incompatible types in assignment (expression has type "Ok[float]", variable has type "Ok[int]")  [assignment]
+    some_int: Some[int] = Some(42)
+    some_float: Some[float] = some_int
+    some_int = some_float  # E: Incompatible types in assignment (expression has type "Some[float]", variable has type "Some[int]")  [assignment]
 
-    err_type: Err[TypeError] = Err(TypeError("foo"))
-    err_exc: Err[Exception] = err_type
-    err_type = err_exc  # E: Incompatible types in assignment (expression has type "Err[Exception]", variable has type "Err[TypeError]")  [assignment]
+    nothing: Nothing = Nothing()
 
-    result_int_type: Result[int, TypeError] = ok_int or err_type
-    result_float_exc: Result[float, Exception] = result_int_type
-    result_int_type = result_float_exc  # E: Incompatible types in assignment (expression has type "Ok[float] | Err[Exception]", variable has type "Ok[int] | Err[TypeError]")  [assignment]
+    maybe_int: Maybe[int] = some_int or nothing
+    maybe_float: Maybe[float] = maybe_int
+    maybe_int = maybe_float  # E: Incompatible types in assignment (expression has type "Some[float] | Nothing", variable has type "Some[int] | Nothing")  [assignment]
 
-- case: map_ok_err
+- case: map_ok
   disable_cache: false
   main: |
-    from result import Err, Ok
+    from maybe import Maybe, Some, Nothing
 
-    o = Ok("42")
-    reveal_type(o.map(int))  # N: Revealed type is "result.result.Ok[builtins.int]"
-    reveal_type(o.map_err(int))  # N: Revealed type is "result.result.Ok[builtins.str]"
+    s = Some("42")
+    reveal_type(s.map(int))  # N: Revealed type is "maybe.maybe.Some[builtins.int]"
 
-    e = Err("42")
-    reveal_type(e.map(int))  # N: Revealed type is "result.result.Err[builtins.str]"
-    reveal_type(e.map_err(int))  # N: Revealed type is "result.result.Err[builtins.int]"
+    n = Nothing()
+    reveal_type(n.map(int))  # N: Revealed type is "maybe.maybe.Nothing"
 
-- case: map_result
+- case: map_maybe
   disable_cache: false
   main: |
-    from result import Result, Ok
+    from maybe import Maybe, Some
 
-    greeting_res: Result[str, ValueError] = Ok("Hello")
+    greeting: Maybe[str] = Some("Hello")
 
-    personalized_greeting_res = greeting_res.map(lambda g: f"{g}, John")
-    reveal_type(personalized_greeting_res) # N: Revealed type is "Union[result.result.Ok[builtins.str], result.result.Err[builtins.ValueError]]"
+    personalized_greeting = greeting.map(lambda g: f"{g}, John")
+    reveal_type(personalized_greeting) # N: Revealed type is "Union[maybe.maybe.Some[builtins.str], maybe.maybe.Nothing]"
 
-    personalized_greeting = personalized_greeting_res.ok()
-    reveal_type(personalized_greeting) # N: Revealed type is "Union[builtins.str, None]"
+    some = personalized_greeting.some()
+    reveal_type(some) # N: Revealed type is "Union[builtins.str, None]"
 
-- case: map_result
+- case: map_maybe
   disable_cache: false
   main: |
-    from result import Ok, Err, is_ok, is_err
+    from maybe import Maybe, Some, Nothing, is_some, is_nothing
 
-    result = Ok(1)
-    err = Err("error")
-    if is_ok(result):
-        reveal_type(result)  # N: Revealed type is "result.result.Ok[builtins.int]"
-    elif is_err(err):
-        reveal_type(err)  # N: Revealed type is "result.result.Err[builtins.str]"
+    maybe = Some(1)
+    nothing = Nothing()
+    if is_some(maybe):
+        reveal_type(maybe)  # N: Revealed type is "maybe.maybe.Some[builtins.int]"
+    elif is_nothing(nothing):
+        reveal_type(nothing)  # N: Revealed type is "maybe.maybe.Nothing"
