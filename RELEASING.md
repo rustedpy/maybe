@@ -34,7 +34,7 @@ python3 -m build
 
 6) Upload package to PyPI:
 ```
-twine upload dist/maybe{VERSION}*
+twine upload dist/rustedpy-maybe-${VERSION}.tar.gz dist/rustedpy_maybe-${VERSION}-*.whl
 git push
 git push --tags
 ```
