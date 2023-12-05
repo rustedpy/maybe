@@ -42,7 +42,7 @@ Example usage,
 
 .. sourcecode:: Python
 
-    from rustedpy-maybe import Nothing, Some
+    from maybe import Nothing, Some
 
     o = Some('yay')
     n = Nothing()
