@@ -16,7 +16,12 @@ A simple Maybe (Option) type for Python 3 `inspired by Rust
 Installation
 ============
 
-Not yet available on PyPI. PyPI package coming soon.
+Latest release:
+
+.. sourcecode:: sh
+
+   $ pip install rustedpy-maybe
+
 
 Latest GitHub ``master`` branch version:
 
