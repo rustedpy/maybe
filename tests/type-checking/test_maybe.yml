@@ -35,9 +35,27 @@
     res6 = res4.or_else(toint)
     reveal_type(res6) # N: Revealed type is "maybe.maybe.Some[builtins.int]"
 
-- case: covariance
+- case: covariance_pre310
+  skip: "sys.version_info >= (3, 10)"
   disable_cache: false
   main: |
+    from maybe import Maybe, Some, Nothing
+
+    some_int: Some[int] = Some(42)
+    some_float: Some[float] = some_int
+    some_int = some_float  # E: Incompatible types in assignment (expression has type "Some[float]", variable has type "Some[int]")  [assignment]
+
+    nothing: Nothing = Nothing()
+
+    maybe_int: Maybe[int] = some_int or nothing
+    maybe_float: Maybe[float] = maybe_int
+    maybe_int = maybe_float  # E: Incompatible types in assignment (expression has type "Union[Some[float], Nothing]", variable has type "Union[Some[int], Nothing]")  [assignment]
+
+- case: covariance
+  skip: "sys.version_info < (3, 10)"
+  disable_cache: false
+  main: |
+    import sys
     from maybe import Maybe, Some, Nothing
 
     some_int: Some[int] = Some(42)
