@@ -4,10 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.mypy]
 python_version = "3.11"
-files = [
-  "src",
-  "tests",
-]
+files = ["src", "tests"]
 # Exclude files with pattern matching syntax until we drop support for Python
 # versions that don't support pattern matching. Trying to use with an older
 # Python version results in a "invalid syntax" error from mypy
@@ -32,17 +29,19 @@ warn_return_any = true
 warn_unused_configs = true
 warn_unused_ignores = true
 
+[tool.coverage.run]
+# Ignore "Couldn't parse Python file" warnings produced when attempting to parse
+# Python 3.10+ code using an earlier version of Python.
+disable_warnings = ["couldnt-parse"]
+
 [tool.pytest.ini_options]
 addopts = [
   "--tb=short",
-  "--cov=maybe",
-  "--cov=tests",
-  "--cov-report=term",
+  "--cov=src",
+  "--cov-report=term-missing",
   "--cov-report=xml",
 
   # By default, ignore tests that only run on Python 3.10+
   "--ignore=tests/test_pattern_matching.py",
 ]
-testpaths = [
-  "tests",
-]
+testpaths = ["tests"]
