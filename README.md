@@ -11,14 +11,13 @@ https://doc.rust-lang.org/std/option/), fully type annotated.
 Latest release:
 
 ```sh
-$ pip install rustedpy-maybe
+pip install rustedpy-maybe
 ```
-
 
 Latest GitHub `master` branch version:
 
 ```sh
-$ pip install git+https://github.com/rustedpy/maybe
+pip install git+https://github.com/rustedpy/maybe
 ```
 
 ## Summary
@@ -47,19 +46,19 @@ and `make` installed. On Windows, you will need to refer to the Python
 documentation (linked below) and reference the `Makefile` for commands to run
 from the non-unix shell you're using on Windows.
 
-1. Setup and activate a virtual environment. See [Python docs][pydocs-venv] for more
-   information about virtual environments and setup.
-2. Run `make install` to install dependencies
-3. Switch to a new git branch and make your changes
-4. Test your changes:
-  - `make test`
-  - `make lint`
-  - You can also start a Python REPL and import `maybe`
-5. Update documentation
-  - Edit any relevant docstrings, markdown files
-  - Run `make docs`
-6. Add an entry to the [changelog](./CHANGELOG.md)
-5. Git commit all your changes and create a new PR.
+1. Setup and activate a virtual environment.  See [Python docs][pydocs-venv] for
+   more information about virtual environments and setup.
+1. Run `make install` to install dependencies
+1. Switch to a new git branch and make your changes
+1. Test your changes:
+   - `make test`
+   - `make lint`
+   - You can also start a Python REPL and import `maybe`
+1. Update documentation
+   - Edit any relevant docstrings, markdown files
+   - Run `make docs`
+1. Add an entry to the [changelog](./CHANGELOG.md)
+1. Git commit all your changes and create a new PR.
 
 [pydocs-venv]: https://docs.python.org/3/library/venv.html
 
