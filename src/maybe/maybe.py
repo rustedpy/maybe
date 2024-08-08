@@ -281,7 +281,7 @@ class UnwrapError(Exception):
 
 
 def is_some(maybe: Maybe[T]) -> TypeGuard[Some[T]]:
-    """A typeguard to check if a maybe is an Some
+    """A typeguard to check if a maybe is a Some
 
     Usage:
     >>> r: Maybe[int, str] = get_a_maybe()
@@ -294,7 +294,7 @@ def is_some(maybe: Maybe[T]) -> TypeGuard[Some[T]]:
 
 
 def is_nothing(maybe: Maybe[T]) -> TypeGuard[Nothing]:
-    """A typeguard to check if a maybe is an Nothing
+    """A typeguard to check if a maybe is a Nothing
 
     Usage:
     >>> r: Maybe[int, str] = get_a_maybe()

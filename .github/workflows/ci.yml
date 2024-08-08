@@ -8,74 +8,65 @@ on:
 name: CI
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python:
-          - '3.11'
-          - '3.10'
-          - '3.9'
-          - '3.8'
-    name: Python ${{ matrix.python }}
+          - version: '3.12'
+          - version: '3.11'
+          - version: '3.10'
+          - version: '3.9'
+            exclude-pattern-matching: true
+          - version: '3.8'
+            exclude-pattern-matching: true
+    name: Python ${{ matrix.python.version }}
     steps:
-      # Python
-      - name: Setup python ${{ matrix.python }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python }}
-
       # Check out code
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      # Cached dependencies
-      - uses: actions/cache@v1
+      # Python
+      - name: Setup python ${{ matrix.python.version }}
+        uses: actions/setup-python@v5
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-py${{ matrix.python }}-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-py${{ matrix.python }}-
+          python-version: ${{ matrix.python.version }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
       - name: Install dev dependencies
-        run: pip install --requirement requirements-dev.txt
+        run: pip install --root-user-action=ignore --requirement requirements-dev.txt
 
       # Install library
       - name: Install maybe
-        run: pip install --editable .
+        run: pip install --root-user-action=ignore --editable .
 
       # Tests
-      - name: Run tests
-        run: pytest --ignore=tests/test_pattern_matching.py --ignore=tests/type-checking/test_maybe.yml
-      - name: Run tests (type checking)
-        if: matrix.python != '3.8' && matrix.python != '3.9'
-        # These started breaking for <= 3.9, due to the type checker using a
-        # '|' for unions rather than 'Union[...]', so it's not possible to run
-        # the tests without maintaining two duplicate files (one for <= 3.9 and
-        # one for > 3.9)
-        run: pytest tests/type-checking/test_maybe.yml
-      - name: Run tests (pattern matching)
-        if: matrix.python == '3.10' || matrix.python == '3.11'
-        run: pytest tests/test_pattern_matching.py
+      - name: Run tests (excluding pattern matching)
+        if: ${{ matrix.python.exclude-pattern-matching }}
+        run: pytest --ignore=tests/test_pattern_matching.py
+      - name: Run tests (including pattern matching)
+        if: ${{ ! matrix.python.exclude-pattern-matching }}
+        run: pytest
 
       # Linters
-      - name: Run flake8 (Python >= 3.10)
-        run: flake8
-        if: matrix.python != '3.9' && matrix.python != '3.8'
-      - name: Run flake8 (Python < 3.10)
+      - name: Run flake8 (excluding pattern matching)
+        if: ${{ matrix.python.exclude-pattern-matching }}
         run: flake8 --extend-exclude tests/test_pattern_matching.py
-        if: matrix.python == '3.9' || matrix.python == '3.8'
+      - name: Run flake8 (including pattern matching)
+        if: ${{ ! matrix.python.exclude-pattern-matching }}
+        run: flake8
       - name: Run mypy
         run: mypy
 
       # Packaging
       - name: Build packages
         run: |
-          pip install --upgrade build pip setuptools wheel
+          pip install --root-user-action=ignore --upgrade build pip setuptools wheel
           python -m build
 
       # Coverage
       - name: Upload coverage to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v4
         if: matrix.python == '3.9'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
