@@ -281,26 +281,32 @@ class UnwrapError(Exception):
 
 
 def is_some(maybe: Maybe[T]) -> TypeGuard[Some[T]]:
-    """A typeguard to check if a maybe is a Some
+    """A typeguard to check if a maybe is a `Some`.
 
     Usage:
-    >>> r: Maybe[int, str] = get_a_maybe()
-    >>> if is_some(r):
-    >>>     r   # r is of type Some[int]
-    >>> elif is_nothing(r):
-    >>>     r   # r is of type Nothing[str]
+
+    ```plain
+        >>> r: Maybe[int, str] = get_a_maybe()
+        >>> if is_some(r):
+        ...     r   # r is of type Some[int]
+        ... elif is_nothing(r):
+        ...     r   # r is of type Nothing[str]
+    ```
     """
     return maybe.is_some()
 
 
 def is_nothing(maybe: Maybe[T]) -> TypeGuard[Nothing]:
-    """A typeguard to check if a maybe is a Nothing
+    """A typeguard to check if a maybe is a `Nothing`.
 
     Usage:
-    >>> r: Maybe[int, str] = get_a_maybe()
-    >>> if is_some(r):
-    >>>     r   # r is of type Some[int]
-    >>> elif is_nothing(r):
-    >>>     r   # r is of type Nothing[str]
+
+    ```plain
+        >>> r: Maybe[int, str] = get_a_maybe()
+        >>> if is_some(r):
+        ...     r   # r is of type Some[int]
+        ... elif is_nothing(r):
+        ...     r   # r is of type Nothing[str]
+    ```
     """
     return maybe.is_nothing()
