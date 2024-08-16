@@ -92,7 +92,7 @@
     some = personalized_greeting.some()
     reveal_type(some) # N: Revealed type is "Union[builtins.str, None]"
 
-- case: map_maybe
+- case: typeguard
   disable_cache: false
   main: |
     from maybe import Maybe, Some, Nothing, is_some, is_nothing

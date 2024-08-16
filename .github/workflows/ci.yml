@@ -34,7 +34,7 @@ jobs:
           cache-dependency-path: requirements-dev.txt
 
       - name: Install dev dependencies
-        run: pip install --root-user-action=ignore --requirement requirements-dev.txt
+        run: pip install --root-user-action=ignore --upgrade pip --requirement requirements-dev.txt
 
       # Install library
       - name: Install maybe
