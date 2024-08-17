@@ -4,7 +4,7 @@ from typing import Callable
 
 import pytest
 
-from maybe import Some, SomeNothing, Maybe, Nothing, UnwrapError
+from maybe import Some, SomeNothing, Maybe, Nothing, UnwrapError, is_nothing, is_some
 
 
 def test_some_factories() -> None:
@@ -21,6 +21,7 @@ def test_nothing_factory() -> None:
 def test_eq() -> None:
     assert Some(1) == Some(1)
     assert Nothing() == Nothing()
+    assert not (Nothing() != Nothing())
     assert Some(1) != Nothing()
     assert Some(1) != Some(2)
     assert not (Some(1) != Some(1))
@@ -58,6 +59,14 @@ def test_some() -> None:
     assert res.is_some() is True
     assert res.is_nothing() is False
     assert res.some_value == 'haha'
+
+
+def test_some_guard() -> None:
+    assert is_some(Some(1))
+
+
+def test_nothing_guard() -> None:
+    assert is_nothing(Nothing())
 
 
 def test_nothing() -> None:
@@ -185,7 +194,7 @@ def test_slots() -> None:
 
 
 def sq(i: int) -> Maybe[int]:
-    return Some(i * i)
+    return Some(i**2)
 
 
 def to_nothing(_: int) -> Maybe[int]:

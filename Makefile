@@ -6,8 +6,8 @@ PYTHON_PRE_310 := $(shell python -c "import sys; print(sys.version_info < (3, 10
 
 install: phony
 	@echo Installing dependencies...
-	pip install --require-virtualenv -r requirements-dev.txt
-	pip install --require-virtualenv -e .
+	python -m pip install --require-virtualenv -r requirements-dev.txt
+	python -m pip install --require-virtualenv -e .
 
 lint: phony lint-flake lint-mypy
 
