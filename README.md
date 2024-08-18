@@ -40,8 +40,8 @@ assert n.unwrap_or_else(lambda: 'default') == 'default'
 ```
 
 There are some methods that support conversion from a `Maybe` to a `Result` type
-in the `result` package.  If you wish to leverage these methods, you must add
-`result` to your dependency list:
+in the [result library](https://github.com/rustedpy/result/).  If you wish to
+leverage these methods, you must add `result` to your dependency list:
 
 ```python
 from maybe import Nothing, Some
