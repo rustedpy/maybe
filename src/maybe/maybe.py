@@ -1,5 +1,3 @@
-# mypy: disable-error-code="import-not-found"
-
 from __future__ import annotations
 
 import sys
@@ -22,7 +20,7 @@ else:  # pragma: no cover
 
 
 try:
-    import result  # pyright: ignore[reportMissingImports]
+    import result
 
     _RESULT_INSTALLED = True
 except ImportError:  # pragma: no cover

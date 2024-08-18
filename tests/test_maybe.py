@@ -3,15 +3,9 @@ from __future__ import annotations
 from typing import Callable
 
 import pytest
+import result
 
 from maybe import Some, SomeNothing, Maybe, Nothing, UnwrapError, is_nothing, is_some
-
-try:
-    import result  # pyright: ignore[reportMissingImports]
-
-    _RESULT_INSTALLED = True
-except ImportError:
-    _RESULT_INSTALLED = False
 
 
 def test_some_factories() -> None:
@@ -209,6 +203,22 @@ def test_slots() -> None:
         n.some_arbitrary_attribute = 1  # type: ignore[attr-defined]
 
 
+def test_some_ok_or() -> None:
+    assert Some(1).ok_or('error') == result.Ok(1)
+
+
+def test_some_ok_or_else() -> None:
+    assert Some(1).ok_or_else('error') == result.Ok(1)
+
+
+def test_nothing_ok_or() -> None:
+    assert Nothing().ok_or('error') == result.Err('error')
+
+
+def test_nothing_ok_or_else() -> None:
+    assert Nothing().ok_or_else(lambda: 'error') == result.Err('error')
+
+
 def sq(i: int) -> Maybe[int]:
     return Some(i**2)
 
@@ -220,17 +230,3 @@ def to_nothing(_: int) -> Maybe[int]:
 # Lambda versions of the same functions, just for test/type coverage
 sq_lambda: Callable[[int], Maybe[int]] = lambda i: Some(i * i)
 to_nothing_lambda: Callable[[int], Maybe[int]] = lambda _: Nothing()
-
-
-if _RESULT_INSTALLED:
-    def test_some_ok_or() -> None:
-        assert Some(1).ok_or('error') == result.Ok(1)
-
-    def test_some_ok_or_else() -> None:
-        assert Some(1).ok_or_else('error') == result.Ok(1)
-
-    def test_nothing_ok_or() -> None:
-        assert Nothing().ok_or('error') == result.Err('error')
-
-    def test_nothing_ok_or_else() -> None:
-        assert Nothing().ok_or_else(lambda: 'error') == result.Err('error')
