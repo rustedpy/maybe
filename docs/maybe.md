@@ -13,7 +13,7 @@
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L283"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L334"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_some`
 
@@ -36,7 +36,7 @@ Usage:
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L299"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L350"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_nothing`
 
@@ -59,12 +59,12 @@ Usage:
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L40"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Some`
 An object that indicates some inner value is present 
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L38"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -87,7 +87,7 @@ Return the inner value.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L123"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L133"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `and_then`
 
@@ -99,7 +99,7 @@ There is a contained value, so return the maybe of `op` with the original value 
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L72"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L82"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `expect`
 
@@ -111,7 +111,7 @@ Return the value.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L66"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `is_nothing`
 
@@ -125,7 +125,7 @@ is_nothing() → Literal[False]
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L53"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L63"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `is_some`
 
@@ -139,7 +139,7 @@ is_some() → Literal[True]
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L102"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L112"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map`
 
@@ -151,7 +151,7 @@ There is a contained value, so return `Some` with original value mapped to a new
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L109"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L119"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_or`
 
@@ -163,7 +163,7 @@ There is a contained value, so return the original value mapped to a new value u
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L116"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L126"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_or_else`
 
@@ -175,7 +175,35 @@ There is a contained value, so return original value mapped to a new value using
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L130"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L148"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `ok_or`
+
+```python
+ok_or(_error: 'object') → Ok[T]
+```
+
+Return a `result.Ok` with the inner value. 
+
+**NOTE**: This method is available only if the `result` package is installed. 
+
+---
+
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L157"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `ok_or_else`
+
+```python
+ok_or_else(_op: 'object') → Ok[T]
+```
+
+Return a `result.Ok` with the inner value. 
+
+**NOTE**: This method is available only if the `result` package is installed. 
+
+---
+
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L140"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `or_else`
 
@@ -187,7 +215,7 @@ There is a contained value, so return `Some` with the original value
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L59"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L69"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `some`
 
@@ -199,7 +227,7 @@ Return the value.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L78"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L88"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap`
 
@@ -211,19 +239,19 @@ Return the value.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L84"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L94"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or`
 
 ```python
-unwrap_or(_default: 'U') → T
+unwrap_or(_default: 'object') → T
 ```
 
 Return the value. 
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L90"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L100"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or_else`
 
@@ -235,7 +263,7 @@ Return the value.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L96"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L106"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or_raise`
 
@@ -248,12 +276,12 @@ Return the value.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L137"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L167"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Nothing`
 An object that indicates no inner value is present 
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L145"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L175"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -270,7 +298,7 @@ __init__() → None
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L230"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L260"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `and_then`
 
@@ -282,7 +310,7 @@ There is no contained value, so return `Nothing`
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L174"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L204"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `expect`
 
@@ -294,7 +322,7 @@ Raises an `UnwrapError`.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L165"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `is_nothing`
 
@@ -308,7 +336,7 @@ is_nothing() → Literal[True]
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L192"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `is_some`
 
@@ -322,7 +350,7 @@ is_some() → Literal[False]
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L212"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L242"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map`
 
@@ -334,7 +362,7 @@ Return `Nothing`
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L218"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L248"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_or`
 
@@ -346,7 +374,7 @@ Return the default value
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L224"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L254"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_or_else`
 
@@ -358,7 +386,35 @@ Return the result of the `default_op` function
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L236"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L274"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `ok_or`
+
+```python
+ok_or(error: 'E') → Err[E]
+```
+
+There is no contained value, so return a `result.Err` with the given error value. 
+
+**NOTE**: This method is available only if the `result` package is installed. 
+
+---
+
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L284"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `ok_or_else`
+
+```python
+ok_or_else(op: 'Callable[[], E]') → Err[E]
+```
+
+There is no contained value, so return a `result.Err` with the result of `op`. 
+
+**NOTE**: This method is available only if the `result` package is installed. 
+
+---
+
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L266"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `or_else`
 
@@ -370,7 +426,7 @@ There is no contained value, so return the result of `op`
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L168"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L198"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `some`
 
@@ -382,7 +438,7 @@ Return `None`.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L184"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L214"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap`
 
@@ -394,7 +450,7 @@ Raises an `UnwrapError`.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L194"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L224"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or`
 
@@ -406,7 +462,7 @@ Return `default`.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L200"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L230"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or_else`
 
@@ -418,7 +474,7 @@ There is no contained value, so return a new value by calling `op`.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L206"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L236"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or_raise`
 
@@ -431,14 +487,14 @@ There is no contained value, so raise the exception with the value.
 
 ---
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L259"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L310"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `UnwrapError`
 Exception raised from ``.unwrap_<...>`` and ``.expect_<...>`` calls. 
 
 The original ``Maybe`` can be accessed via the ``.maybe`` attribute, but this is not intended for regular use, as type information is lost: ``UnwrapError`` doesn't know about ``T``, since it's raised from ``Some()`` or ``Nothing()`` which only knows about either ``T`` or no-value, not both. 
 
-<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L271"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/maybe/blob/main/src/maybe/maybe.py#L322"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 

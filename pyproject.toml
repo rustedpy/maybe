@@ -19,6 +19,7 @@ disallow_untyped_defs = true
 ignore_missing_imports = true
 no_implicit_optional = true
 no_implicit_reexport = true
+pretty = true
 show_column_numbers = true
 show_error_codes = true
 show_error_context = true
@@ -44,4 +45,3 @@ addopts = [
   # By default, ignore tests that only run on Python 3.10+
   "--ignore=tests/test_pattern_matching.py",
 ]
-testpaths = ["tests"]

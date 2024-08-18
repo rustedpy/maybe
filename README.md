@@ -39,6 +39,22 @@ assert o.unwrap_or_else(str.upper) == 'yay'
 assert n.unwrap_or_else(lambda: 'default') == 'default'
 ```
 
+There are some methods that support conversion from a `Maybe` to a `Result` type
+in the `result` package.  If you wish to leverage these methods, you must add
+`result` to your dependency list:
+
+```python
+from maybe import Nothing, Some
+from result import Ok, Err
+
+o = Some('yay')
+n = Nothing()
+assert o.ok_or('error') == Ok('yay')
+assert o.ok_or_else(lambda: 'error') == Ok('yay')
+assert n.ok_or('error') == Err('error')
+assert n.ok_or_else(lambda: 'error') == Err('error')
+```
+
 ## Contributing
 
 These steps should work on any Unix-based system (Linux, macOS, etc) with Python
