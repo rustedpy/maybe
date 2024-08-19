@@ -89,7 +89,7 @@ class Some(Generic[T]):
         """
         return self._value
 
-    def unwrap_or(self, _default: object) -> T:
+    def unwrap_or(self, _default: U) -> T:  # pyright: ignore[reportInvalidTypeVarUse]
         """
         Return the value.
         """
@@ -143,7 +143,7 @@ class Some(Generic[T]):
 
     if _RESULT_INSTALLED:
 
-        def ok_or(self, _error: object) -> result.Ok[T]:
+        def ok_or(self, _error: E) -> result.Ok[T]:  # pyright: ignore[reportInvalidTypeVarUse]
             """
             Return a `result.Ok` with the inner value.
 
@@ -152,7 +152,7 @@ class Some(Generic[T]):
             """
             return result.Ok(self._value)
 
-        def ok_or_else(self, _op: object) -> result.Ok[T]:
+        def ok_or_else(self, _op: Callable[[], E]) -> result.Ok[T]:
             """
             Return a `result.Ok` with the inner value.
 

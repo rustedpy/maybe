@@ -208,7 +208,7 @@ def test_some_ok_or() -> None:
 
 
 def test_some_ok_or_else() -> None:
-    assert Some(1).ok_or_else('error') == result.Ok(1)
+    assert Some(1).ok_or_else(lambda: 'error') == result.Ok(1)
 
 
 def test_nothing_ok_or() -> None:
