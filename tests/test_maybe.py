@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Callable
 
 import pytest
+import result
 
 from maybe import Some, SomeNothing, Maybe, Nothing, UnwrapError, is_nothing, is_some
 
@@ -79,7 +80,11 @@ def test_some_method() -> None:
     o = Some('yay')
     n = Nothing()
     assert o.some() == 'yay'
-    # TODO(francium): Can this type ignore directive be removed? mypy may fail?
+
+    # Unfortunately, it seems the mypy team made a very deliberate and highly contested
+    # decision to mark using the return value from a function known to only return None
+    # as an error, so we are forced to ignore the check here.
+    # See https://github.com/python/mypy/issues/6549
     assert n.some() is None  # type: ignore[func-returns-value]
 
 
@@ -159,7 +164,12 @@ def test_or_else() -> None:
     assert Some(2).or_else(sq).or_else(sq).some() == 2
     assert Some(2).or_else(to_nothing).or_else(sq).some() == 2
     assert Nothing().or_else(lambda: sq(3)).or_else(lambda: to_nothing(2)).some() == 9
-    assert Nothing().or_else(lambda: to_nothing(2)).or_else(lambda: to_nothing(2)).is_nothing()
+    assert (
+        Nothing()
+        .or_else(lambda: to_nothing(2))
+        .or_else(lambda: to_nothing(2))
+        .is_nothing()
+    )
 
     assert Some(2).or_else(sq_lambda).or_else(sq).some() == 2
     assert Some(2).or_else(to_nothing_lambda).or_else(sq_lambda).some() == 2
@@ -191,6 +201,22 @@ def test_slots() -> None:
         o.some_arbitrary_attribute = 1  # type: ignore[attr-defined]
     with pytest.raises(AttributeError):
         n.some_arbitrary_attribute = 1  # type: ignore[attr-defined]
+
+
+def test_some_ok_or() -> None:
+    assert Some(1).ok_or('error') == result.Ok(1)
+
+
+def test_some_ok_or_else() -> None:
+    assert Some(1).ok_or_else(lambda: 'error') == result.Ok(1)
+
+
+def test_nothing_ok_or() -> None:
+    assert Nothing().ok_or('error') == result.Err('error')
+
+
+def test_nothing_ok_or_else() -> None:
+    assert Nothing().ok_or_else(lambda: 'error') == result.Err('error')
 
 
 def sq(i: int) -> Maybe[int]:

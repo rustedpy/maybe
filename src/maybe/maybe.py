@@ -19,9 +19,17 @@ else:  # pragma: no cover
     from typing_extensions import ParamSpec, TypeAlias, TypeGuard
 
 
+try:
+    import result
+
+    _RESULT_INSTALLED = True
+except ImportError:  # pragma: no cover
+    _RESULT_INSTALLED = False
+
+
 T = TypeVar("T", covariant=True)  # Success type
 U = TypeVar("U")
-F = TypeVar("F")
+E = TypeVar("E")
 P = ParamSpec("P")
 R = TypeVar("R")
 TBE = TypeVar("TBE", bound=BaseException)
@@ -81,7 +89,7 @@ class Some(Generic[T]):
         """
         return self._value
 
-    def unwrap_or(self, _default: U) -> T:
+    def unwrap_or(self, _default: U) -> T:  # pyright: ignore[reportInvalidTypeVarUse]
         """
         Return the value.
         """
@@ -132,6 +140,26 @@ class Some(Generic[T]):
         There is a contained value, so return `Some` with the original value
         """
         return self
+
+    if _RESULT_INSTALLED:
+
+        def ok_or(self, _error: E) -> result.Ok[T]:  # pyright: ignore[reportInvalidTypeVarUse]
+            """
+            Return a `result.Ok` with the inner value.
+
+            **NOTE**: This method is available only if the `result` package is
+            installed.
+            """
+            return result.Ok(self._value)
+
+        def ok_or_else(self, _op: Callable[[], E]) -> result.Ok[T]:
+            """
+            Return a `result.Ok` with the inner value.
+
+            **NOTE**: This method is available only if the `result` package is
+            installed.
+            """
+            return result.Ok(self._value)
 
 
 class Nothing:
@@ -239,21 +267,42 @@ class Nothing:
         """
         return op()
 
+    if _RESULT_INSTALLED:
 
-# define Maybe as a generic type alias for use
-# in type annotations
+        def ok_or(self, error: E) -> result.Err[E]:
+            """
+            There is no contained value, so return a `result.Err` with the given
+            error value.
+
+            **NOTE**: This method is available only if the `result` package is
+            installed.
+            """
+            return result.Err(error)
+
+        def ok_or_else(self, op: Callable[[], E]) -> result.Err[E]:
+            """
+            There is no contained value, so return a `result.Err` with the
+            result of `op`.
+
+            **NOTE**: This method is available only if the `result` package is
+            installed.
+            """
+            return result.Err(op())
+
+
+# Define Maybe as a generic type alias for use in type annotations
+Maybe: TypeAlias = Union[Some[T], Nothing]
 """
 A simple `Maybe` type inspired by Rust.
 Not all methods (https://doc.rust-lang.org/std/option/enum.Option.html)
 have been implemented, only the ones that make sense in the Python context.
 """
-Maybe: TypeAlias = Union[Some[T], Nothing]
 
-"""
-A type to use in `isinstance` checks.
-This is purely for convenience sake, as you could also just write `isinstance(res, (Some, Nothing))
-"""
 SomeNothing: Final = (Some, Nothing)
+"""
+A type to use in `isinstance` checks.  This is purely for convenience sake, as you could
+also just write `isinstance(res, (Some, Nothing))
+"""
 
 
 class UnwrapError(Exception):

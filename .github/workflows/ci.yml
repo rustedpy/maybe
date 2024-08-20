@@ -38,7 +38,7 @@ jobs:
 
       # Install library
       - name: Install maybe
-        run: pip install --root-user-action=ignore --editable .
+        run: pip install --root-user-action=ignore --editable .[result]
 
       # Tests
       - name: Run tests (excluding pattern matching)

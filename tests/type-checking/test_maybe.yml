@@ -92,6 +92,40 @@
     some = personalized_greeting.some()
     reveal_type(some) # N: Revealed type is "Union[builtins.str, None]"
 
+- case: ok_or
+  disable_cache: false
+  main: |
+    from maybe import Maybe, Some, Nothing
+    from result import Ok, Err
+
+    greeting: Maybe[str] = Some("Hello")
+
+    ok_greeting = greeting.ok_or("error")
+    reveal_type(ok_greeting) # N: Revealed type is "Union[result.result.Ok[builtins.str], result.result.Err[builtins.str]]"
+
+    nothing: Maybe[str] = Nothing()
+
+    no_greeting = nothing.ok_or("error")
+    reveal_type(no_greeting) # N: Revealed type is "Union[result.result.Ok[builtins.str], result.result.Err[builtins.str]]"
+
+- case: ok_or_else
+  disable_cache: false
+  main: |
+    from maybe import Maybe, Some, Nothing
+    from result import Ok, Err, Result
+
+    greeting: Maybe[str] = Some("Hello")
+
+    ok_greeting = greeting.ok_or_else(lambda: "error")
+    reveal_type(ok_greeting) # N: Revealed type is "Union[result.result.Ok[builtins.str], result.result.Err[builtins.str]]"
+    greeting.ok_or_else("error") # E: Argument 1 to "ok_or_else" of "Some" has incompatible type "str"; expected "Callable[[], Never]"  [arg-type] # E: Argument 1 to "ok_or_else" of "Nothing" has incompatible type "str"; expected "Callable[[], Never]"  [arg-type]
+
+    nothing: Maybe[str] = Nothing()
+
+    no_greeting: Result[str, ValueError] = nothing.ok_or_else(lambda: ValueError("error"))
+    reveal_type(no_greeting) # N: Revealed type is "Union[result.result.Ok[builtins.str], result.result.Err[builtins.ValueError]]"
+    nothing.ok_or_else("error") # E: Argument 1 to "ok_or_else" of "Some" has incompatible type "str"; expected "Callable[[], Never]"  [arg-type] # E: Argument 1 to "ok_or_else" of "Nothing" has incompatible type "str"; expected "Callable[[], Never]"  [arg-type]
+
 - case: typeguard
   disable_cache: false
   main: |
