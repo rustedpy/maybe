@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from typing import Callable
-
 import pytest
 import result
 
-from maybe import Some, SomeNothing, Maybe, Nothing, UnwrapError, is_nothing, is_some
+from maybe import Maybe, Nothing, Some, SomeNothing, UnwrapError, is_nothing, is_some
+from maybe.maybe import NOTHING
 
 
 def test_some_factories() -> None:
@@ -22,12 +21,19 @@ def test_nothing_factory() -> None:
 def test_eq() -> None:
     assert Some(1) == Some(1)
     assert Nothing() == Nothing()
-    assert not (Nothing() != Nothing())
+    assert Nothing() == Nothing()
     assert Some(1) != Nothing()
     assert Some(1) != Some(2)
-    assert not (Some(1) != Some(1))
+    assert Some(1) == Some(1)
     assert Some(1) != "abc"
     assert Some("0") != Some(0)
+
+
+def test_const_nothing() -> None:
+    assert NOTHING == Nothing()
+    assert NOTHING.is_nothing() is True
+    assert Some(1) != NOTHING
+    assert len({Some(1), NOTHING}) == 2
 
 
 def test_hash() -> None:
@@ -44,22 +50,22 @@ def test_repr() -> None:
     n = Nothing()
 
     assert repr(o) == "Some(123)"
-    assert o == eval(repr(o))
+    assert o == eval(repr(o))  # noqa: S307
 
     assert repr(n) == "Nothing()"
-    assert n == eval(repr(n))
+    assert n == eval(repr(n))  # noqa: S307
 
 
 def test_some_value() -> None:
-    res = Some('haha')
-    assert res.some_value == 'haha'
+    res = Some("haha")
+    assert res.some_value == "haha"
 
 
 def test_some() -> None:
-    res = Some('haha')
+    res = Some("haha")
     assert res.is_some() is True
     assert res.is_nothing() is False
-    assert res.some_value == 'haha'
+    assert res.some_value == "haha"
 
 
 def test_some_guard() -> None:
@@ -77,9 +83,9 @@ def test_nothing() -> None:
 
 
 def test_some_method() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
-    assert o.some() == 'yay'
+    assert o.some() == "yay"
 
     # Unfortunately, it seems the mypy team made a very deliberate and highly contested
     # decision to mark using the return value from a function known to only return None
@@ -89,63 +95,63 @@ def test_some_method() -> None:
 
 
 def test_expect() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
-    assert o.expect('failure') == 'yay'
+    assert o.expect("failure") == "yay"
     with pytest.raises(UnwrapError):
-        n.expect('failure')
+        n.expect("failure")
 
 
 def test_unwrap() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
-    assert o.unwrap() == 'yay'
+    assert o.unwrap() == "yay"
     with pytest.raises(UnwrapError):
         n.unwrap()
 
 
 def test_unwrap_or() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
-    assert o.unwrap_or('some_default') == 'yay'
-    assert n.unwrap_or('another_default') == 'another_default'
+    assert o.unwrap_or("some_default") == "yay"
+    assert n.unwrap_or("another_default") == "another_default"
 
 
 def test_unwrap_or_else() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
-    assert o.unwrap_or_else(str.upper) == 'yay'
-    assert n.unwrap_or_else(lambda: 'default') == 'default'
+    assert o.unwrap_or_else(str.upper) == "yay"
+    assert n.unwrap_or_else(lambda: "default") == "default"
 
 
 def test_unwrap_or_raise() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
-    assert o.unwrap_or_raise(ValueError) == 'yay'
-    with pytest.raises(ValueError) as exc_info:
+    assert o.unwrap_or_raise(ValueError) == "yay"
+    with pytest.raises(ValueError) as exc_info:  # noqa: PT011
         n.unwrap_or_raise(ValueError)
     assert exc_info.value.args == ()
 
 
 def test_map() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
-    assert o.map(str.upper).some() == 'YAY'
+    assert o.map(str.upper).some() == "YAY"
     assert n.map(str.upper).is_nothing()
 
 
 def test_map_or() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
-    assert o.map_or('hay', str.upper) == 'YAY'
-    assert n.map_or('hay', str.upper) == 'hay'
+    assert o.map_or("hay", str.upper) == "YAY"
+    assert n.map_or("hay", str.upper) == "hay"
 
 
 def test_map_or_else() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
-    assert o.map_or_else(lambda: 'hay', str.upper) == 'YAY'
-    assert n.map_or_else(lambda: 'hay', str.upper) == 'hay'
+    assert o.map_or_else(lambda: "hay", str.upper) == "YAY"
+    assert n.map_or_else(lambda: "hay", str.upper) == "hay"
 
 
 def test_and_then() -> None:
@@ -176,7 +182,7 @@ def test_or_else() -> None:
 
 
 def test_isinstance_result_type() -> None:
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
     assert isinstance(o, SomeNothing)
     assert isinstance(n, SomeNothing)
@@ -195,7 +201,7 @@ def test_slots() -> None:
     """
     Some and Nothing have slots, so assigning arbitrary attributes fails.
     """
-    o = Some('yay')
+    o = Some("yay")
     n = Nothing()
     with pytest.raises(AttributeError):
         o.some_arbitrary_attribute = 1  # type: ignore[attr-defined]
@@ -204,19 +210,19 @@ def test_slots() -> None:
 
 
 def test_some_ok_or() -> None:
-    assert Some(1).ok_or('error') == result.Ok(1)
+    assert Some(1).ok_or("error") == result.Ok(1)
 
 
 def test_some_ok_or_else() -> None:
-    assert Some(1).ok_or_else(lambda: 'error') == result.Ok(1)
+    assert Some(1).ok_or_else(lambda: "error") == result.Ok(1)
 
 
 def test_nothing_ok_or() -> None:
-    assert Nothing().ok_or('error') == result.Err('error')
+    assert Nothing().ok_or("error") == result.Err("error")
 
 
 def test_nothing_ok_or_else() -> None:
-    assert Nothing().ok_or_else(lambda: 'error') == result.Err('error')
+    assert Nothing().ok_or_else(lambda: "error") == result.Err("error")
 
 
 def sq(i: int) -> Maybe[int]:
@@ -227,6 +233,9 @@ def to_nothing(_: int) -> Maybe[int]:
     return Nothing()
 
 
-# Lambda versions of the same functions, just for test/type coverage
-sq_lambda: Callable[[int], Maybe[int]] = lambda i: Some(i * i)
-to_nothing_lambda: Callable[[int], Maybe[int]] = lambda _: Nothing()
+def sq_lambda(i: int) -> Maybe[int]:
+    return Some(i**2)
+
+
+def to_nothing_lambda(_: int) -> Maybe[int]:
+    return Nothing()

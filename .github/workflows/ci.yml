@@ -22,47 +22,43 @@ jobs:
             exclude-pattern-matching: true
     name: Python ${{ matrix.python.version }}
     steps:
-      # Check out code
       - uses: actions/checkout@v4
 
-      # Python
-      - name: Setup python ${{ matrix.python.version }}
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
         with:
           python-version: ${{ matrix.python.version }}
-          cache: pip
-          cache-dependency-path: requirements-dev.txt
-
-      - name: Install dev dependencies
-        run: pip install --root-user-action=ignore --upgrade pip --requirement requirements-dev.txt
-
-      # Install library
-      - name: Install maybe
-        run: pip install --root-user-action=ignore --editable .[result]
-
+      - name: Install deps
+        run: uv sync --frozen
+  
       # Tests
       - name: Run tests (excluding pattern matching)
         if: ${{ matrix.python.exclude-pattern-matching }}
-        run: pytest --ignore=tests/test_pattern_matching.py
+        run: uv run pytest --ignore=tests/test_pattern_matching.py
       - name: Run tests (including pattern matching)
         if: ${{ ! matrix.python.exclude-pattern-matching }}
-        run: pytest
+        run: uv run pytest
 
       # Linters
+      - name: Ruff
+        run: uv run ruff check
+
+      - name: Ruff format
+        run: uv run ruff format --check
+      
       - name: Run flake8 (excluding pattern matching)
         if: ${{ matrix.python.exclude-pattern-matching }}
-        run: flake8 --extend-exclude tests/test_pattern_matching.py
+        run: uv run flake8 --extend-exclude tests/test_pattern_matching.py
       - name: Run flake8 (including pattern matching)
         if: ${{ ! matrix.python.exclude-pattern-matching }}
-        run: flake8
+        run: uv run flake8
       - name: Run mypy
-        run: mypy
+        run: uv run mypy
 
       # Packaging
       - name: Build packages
         run: |
-          pip install --root-user-action=ignore --upgrade build pip setuptools wheel
-          python -m build
+          uv build
 
       # Coverage
       - name: Upload coverage to codecov.io

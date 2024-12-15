@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from maybe import Nothing, Some, Maybe
+from maybe import Maybe, Nothing, Some
 
 
 def test_pattern_matching_on_some_type() -> None:

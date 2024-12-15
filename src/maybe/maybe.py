@@ -8,7 +8,6 @@ from typing import (
     Generic,
     Literal,
     NoReturn,
-    Type,
     TypeVar,
     Union,
 )
@@ -27,7 +26,7 @@ except ImportError:  # pragma: no cover
     _RESULT_INSTALLED = False
 
 
-T = TypeVar("T", covariant=True)  # Success type
+T_co = TypeVar("T_co", covariant=True)  # Success type
 U = TypeVar("U")
 E = TypeVar("E")
 P = ParamSpec("P")
@@ -35,7 +34,7 @@ R = TypeVar("R")
 TBE = TypeVar("TBE", bound=BaseException)
 
 
-class Some(Generic[T]):
+class Some(Generic[T_co]):
     """
     An object that indicates some inner value is present
     """
@@ -43,16 +42,16 @@ class Some(Generic[T]):
     __match_args__ = ("some_value",)
     __slots__ = ("_value",)
 
-    def __init__(self, value: T) -> None:
+    def __init__(self, value: T_co) -> None:
         self._value = value
 
     def __repr__(self) -> str:
         return f"Some({self._value!r})"
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, Some) and self._value == other._value
 
-    def __ne__(self, other: Any) -> bool:
+    def __ne__(self, other: object) -> bool:
         return not (self == other)
 
     def __hash__(self) -> int:
@@ -64,78 +63,78 @@ class Some(Generic[T]):
     def is_nothing(self) -> Literal[False]:
         return False
 
-    def some(self) -> T:
+    def some(self) -> T_co:
         """
         Return the value.
         """
         return self._value
 
     @property
-    def some_value(self) -> T:
+    def some_value(self) -> T_co:
         """
         Return the inner value.
         """
         return self._value
 
-    def expect(self, _message: str) -> T:
+    def expect(self, _message: str) -> T_co:
         """
         Return the value.
         """
         return self._value
 
-    def unwrap(self) -> T:
+    def unwrap(self) -> T_co:
         """
         Return the value.
         """
         return self._value
 
-    def unwrap_or(self, _default: U) -> T:  # pyright: ignore[reportInvalidTypeVarUse]
+    def unwrap_or(self, _default: U) -> T_co:  # pyright: ignore[reportInvalidTypeVarUse]
         """
         Return the value.
         """
         return self._value
 
-    def unwrap_or_else(self, op: object) -> T:
+    def unwrap_or_else(self, op: object) -> T_co:
         """
         Return the value.
         """
         return self._value
 
-    def unwrap_or_raise(self, e: object) -> T:
+    def unwrap_or_raise(self, e: object) -> T_co:
         """
         Return the value.
         """
         return self._value
 
-    def map(self, op: Callable[[T], U]) -> Some[U]:
+    def map(self, op: Callable[[T_co], U]) -> Some[U]:
         """
         There is a contained value, so return `Some` with original value mapped
         to a new value using the passed in function.
         """
         return Some(op(self._value))
 
-    def map_or(self, _default: object, op: Callable[[T], U]) -> U:
+    def map_or(self, _default: object, op: Callable[[T_co], U]) -> U:
         """
         There is a contained value, so return the original value mapped to a
         new value using the passed in function.
         """
         return op(self._value)
 
-    def map_or_else(self, _default_op: object, op: Callable[[T], U]) -> U:
+    def map_or_else(self, _default_op: object, op: Callable[[T_co], U]) -> U:
         """
         There is a contained value, so return original value mapped to a new
         value using the passed in `op` function.
         """
         return op(self._value)
 
-    def and_then(self, op: Callable[[T], Maybe[U]]) -> Maybe[U]:
+    def and_then(self, op: Callable[[T_co], Maybe[U]]) -> Maybe[U]:
         """
         There is a contained value, so return the maybe of `op` with the
         original value passed in
         """
         return op(self._value)
 
-    def or_else(self, _op: object) -> Some[T]:
+    def or_else(self, _op: object) -> Some[T_co]:
         """
         There is a contained value, so return `Some` with the original value
         """
@@ -143,7 +142,7 @@ class Some(Generic[T]):
 
     if _RESULT_INSTALLED:
 
-        def ok_or(self, _error: E) -> result.Ok[T]:  # pyright: ignore[reportInvalidTypeVarUse]
+        def ok_or(self, _error: E) -> result.Ok[T_co]:  # pyright: ignore[reportInvalidTypeVarUse]
             """
             Return a `result.Ok` with the inner value.
 
@@ -152,7 +151,7 @@ class Some(Generic[T]):
             """
             return result.Ok(self._value)
 
-        def ok_or_else(self, _op: Callable[[], E]) -> result.Ok[T]:
+        def ok_or_else(self, _op: Callable[[], E]) -> result.Ok[T_co]:
             """
             Return a `result.Ok` with the inner value.
 
@@ -176,10 +175,10 @@ class Nothing:
     def __repr__(self) -> str:
         return "Nothing()"
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, Nothing)
 
-    def __ne__(self, other: Any) -> bool:
+    def __ne__(self, other: object) -> bool:
         return not isinstance(other, Nothing)
 
     def __hash__(self) -> int:
@@ -197,7 +196,7 @@ class Nothing:
         """
         Return `None`.
         """
-        return None
+        return
 
     def expect(self, message: str) -> NoReturn:
         """
@@ -225,13 +224,13 @@ class Nothing:
         """
         return default
 
-    def unwrap_or_else(self, op: Callable[[], T]) -> T:
+    def unwrap_or_else(self, op: Callable[[], T_co]) -> T_co:
         """
         There is no contained value, so return a new value by calling `op`.
         """
         return op()
 
-    def unwrap_or_raise(self, e: Type[TBE]) -> NoReturn:
+    def unwrap_or_raise(self, e: type[TBE]) -> NoReturn:
         """
         There is no contained value, so raise the exception with the value.
         """
@@ -261,7 +260,7 @@ class Nothing:
         """
         return self
 
-    def or_else(self, op: Callable[[], Maybe[T]]) -> Maybe[T]:
+    def or_else(self, op: Callable[[], Maybe[T_co]]) -> Maybe[T_co]:
         """
         There is no contained value, so return the result of `op`
         """
@@ -290,8 +289,10 @@ class Nothing:
             return result.Err(op())
 
 
+NOTHING = Nothing()
+
 # Define Maybe as a generic type alias for use in type annotations
-Maybe: TypeAlias = Union[Some[T], Nothing]
+Maybe: TypeAlias = Union[Some[T_co], Nothing]
 """
 A simple `Maybe` type inspired by Rust.
 Not all methods (https://doc.rust-lang.org/std/option/enum.Option.html)
@@ -329,8 +330,9 @@ class UnwrapError(Exception):
         return self._maybe
 
 
-def is_some(maybe: Maybe[T]) -> TypeGuard[Some[T]]:
-    """A typeguard to check if a maybe is a `Some`.
+def is_some(maybe: Maybe[T_co]) -> TypeGuard[Some[T_co]]:
+    """
+    A typeguard to check if a maybe is a `Some`.
 
     Usage:
 
@@ -345,8 +347,9 @@ def is_some(maybe: Maybe[T]) -> TypeGuard[Some[T]]:
     return maybe.is_some()
 
 
-def is_nothing(maybe: Maybe[T]) -> TypeGuard[Nothing]:
-    """A typeguard to check if a maybe is a `Nothing`.
+def is_nothing(maybe: Maybe[T_co]) -> TypeGuard[Nothing]:
+    """
+    A typeguard to check if a maybe is a `Nothing`.
 
     Usage:
 
