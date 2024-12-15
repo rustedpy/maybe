@@ -1,5 +1,6 @@
 from .maybe import (
     Nothing,
+    NOTHING,
     Some,
     SomeNothing,
     Maybe,
@@ -10,6 +11,7 @@ from .maybe import (
 
 __all__ = [
     "Nothing",
+    "NOTHING",
     "Some",
     "SomeNothing",
     "Maybe",

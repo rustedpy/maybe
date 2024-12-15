@@ -289,6 +289,7 @@ class Nothing:
             """
             return result.Err(op())
 
+NOTHING = Nothing()
 
 # Define Maybe as a generic type alias for use in type annotations
 Maybe: TypeAlias = Union[Some[T], Nothing]

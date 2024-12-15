@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Callable
 
+from maybe.maybe import NOTHING
 import pytest
 import result
 
@@ -29,7 +30,12 @@ def test_eq() -> None:
     assert Some(1) != "abc"
     assert Some("0") != Some(0)
 
-
+def test_const_nothing() -> None:
+    assert NOTHING == Nothing()
+    assert NOTHING.is_nothing() is True
+    assert Some(1) != NOTHING
+    assert len({Some(1), NOTHING}) == 2
+    
 def test_hash() -> None:
     assert len({Some(1), Nothing(), Some(1), Nothing()}) == 2
     assert len({Some(1), Some(2)}) == 2
